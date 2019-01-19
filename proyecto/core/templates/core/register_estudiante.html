@@ -1,0 +1,86 @@
+{% extends 'core/base.html' %}
+
+{% block background %}{% load static %}{% static 'core/img/Cabecera1.jpg' %}{% endblock %}
+
+{% block headers %}
+
+<h1>Registro</h1>
+
+{% endblock %}
+
+
+{% block content %}
+
+<h1 style="text-align: center"> Formulario Estudiante </h1>
+
+<form action="{% url 'login' %}" class="needs-validation" novalidate>
+  <div class="form-row">
+    <div class="col-md-4 mb-3">
+      <label for="validationCustom01">Nombre Completo</label>
+      <input type="text" class="form-control" id="validationCustom01" placeholder="Name" required>
+      <div class="invalid-feedback">
+        Coloca tu nombre
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label for="validationCustom02">Identificación</label>
+      <input type="text" class="form-control" id="validationCustom02" placeholder="Id." required>
+      <div class="invalid-feedback">
+        Coloca tu número de identificación
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label for="validationCustom02">Correo</label>
+      <input type="email" class="form-control" id="validationCustom02" placeholder="yo@mail.com" required>
+      <div class="invalid-feedback">
+        Escribe tu correo electrónico
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label for="validationCustom02">Contraseña</label>
+      <input type="password" class="form-control" id="validationCustom02" placeholder="Contraseña" required>
+      <div class="invalid-feedback">
+        Coloca una contraseña
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label for="validationCustom02">Fecha nacimiento</label>
+      <input type="date" class="form-control" id="validationCustom02" placeholder="Nacimiento" required>
+      <div class="invalid-feedback">
+        Selecciona una fecha
+      </div>
+    </div> 
+    <div class="col-md-4 mb-3">
+      <label for="validationCustom02">Genero</label><br>
+      <input type="radio" name="gender" value="female" required> Femenino<br>
+      <input type="radio" name="gender" value="male" required> Masculino<br>
+      <input type="radio" name="gender" value="other" required> Otro
+      <div class="invalid-feedback">
+        Selecciona una opción
+      </div>
+    </div>           
+     <button class="btn btn-primary" type="submit">Registrarme</button>
+</form>
+
+<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+
+{% endblock %}
