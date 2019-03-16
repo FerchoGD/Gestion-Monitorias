@@ -1,0 +1,38 @@
+{% extends 'core/base.html' %}
+
+{% block background %}{% load static %}{% static 'core/img/Cabecera1.jpg' %}{% endblock %}
+
+{% block headers %}
+
+<h1>Registro</h1>
+
+{% endblock %}
+
+
+{% block content %}
+
+<h1 style="text-align: center"> Formulario Estudiante </h1>
+<br>
+<form action="." method="post">
+    {% csrf_token %}
+    <h3 class="mb-4">Registro</h3>
+    <div class="form-row">
+        <div class="col-md-4 mb-3">
+          <label for="validationCustom01">Nombre Completo</label>
+          <input type="text" class="form-control" id="validationCustom01" placeholder="Name" required>
+          <div class="invalid-feedback">
+            Coloca tu nombre
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label for="validationCustom02">Identificación</label>
+          <input type="text" class="form-control" id="validationCustom02" placeholder="Id." required>
+          <div class="invalid-feedback">
+            Coloca tu número de identificación
+          </div>
+        </div>
+    </div>
+      <p><input type="submit" class="btn btn-primary btn-block" value="Confirmar"></p>
+  </form>
+
+{% endblock %}

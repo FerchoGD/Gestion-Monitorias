@@ -32,7 +32,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'registration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'perfiles',
+    'subject',
+    'account',
 ]
 
 MIDDLEWARE = [
@@ -126,6 +127,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+#media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,"media")
+#Auth redirects
+
+#Se comenta la sgt linea para que cuando haga el login se redireccione por defecto a profile 
+# LOGIN_REDIRECT_URL= 'pages:pages'
+LOGOUT_REDIRECT_URL= 'home'
 # Auth redirect
 
 LOGIN_REDIRECT_URL = 'superu'
