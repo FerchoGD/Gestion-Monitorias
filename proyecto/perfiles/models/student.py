@@ -1,7 +1,6 @@
 from django.db import models
 from subject.models.subject import Subject
 
-
 class Student(models.Model):
     id_student = models.SmallIntegerField(verbose_name="Id", default=0)
     name = models.CharField(verbose_name="Nombre", max_length=200)
@@ -12,7 +11,7 @@ class Student(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updated = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
-    subjects = models.ManyToManyField(Subject)
+    subjects = models.ManyToManyField(Subject, related_name='subjects')
 
     class Meta:
         verbose_name = "Estudiante"

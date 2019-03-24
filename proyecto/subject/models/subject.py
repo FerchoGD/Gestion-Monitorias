@@ -9,7 +9,7 @@ class Subject(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updated = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
-    advisor = models.ForeignKey(Advisor, on_delete=models.CASCADE)
+    advisor = models.ForeignKey(Advisor, on_delete=models.CASCADE, related_name='advisor')
 
     class Meta:
         verbose_name = "Materia"

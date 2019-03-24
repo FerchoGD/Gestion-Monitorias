@@ -1,5 +1,4 @@
 from django.db import models
-from perfiles.models import Student
 
 class Advisor(models.Model):
     id_advisor = models.SmallIntegerField(verbose_name="Id", default=0)
@@ -13,7 +12,7 @@ class Advisor(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     updated = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición")
 
-    estudiantes = models.ManyToManyField(Student)
+    estudiantes = models.ManyToManyField('perfiles.Student', related_name='Estudiantes')
 
     class Meta:
         verbose_name = "Monitor"
