@@ -1,0 +1,126 @@
+.sideBar{
+	position: absolute;
+	top: 0;
+	left: -300px;
+	width: 300px;
+	height: 100%;
+	background-color: #1B5079;
+	z-index: 1200;
+	box-sizing: border-box;
+	transition: 0.3s;
+	overflow-y:hidden;
+}
+
+.activeSideBar{
+	left: 0 !important;
+}
+
+#sideBarLogo{
+	width: 100%;
+	text-align:center;
+	padding: 20px 20px;
+	border-bottom: 0.25px solid #ffffff;
+	color: white;
+	align-items: center;
+	display: inline-flex;
+	justify-content: space-between;
+}
+
+#sideBarLogo
+a
+.fa-times{
+	color: #ffffff;
+	font-size: 23px;
+}
+
+#sideBarLogo img{
+	width: 180px;
+}
+
+#sideBarContent{
+	width: 100%;
+	padding: 0px 0px 15px;
+	height: 84vh;
+	overflow-y: auto;
+}
+
+#closeSessionDiv{
+	position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+
+#closeSessionButton{
+	border-radius: 0px;
+}
+
+#sideBarListMenu{
+	list-style: none;
+}
+
+#sideBarListMenu
+li{
+	padding: 15px 0;
+}
+
+#sideBarListMenu
+li
+a{
+	color: #ffffff;
+	margin-left: 15px;
+}
+
+.buttonShow,
+.buttonHide{
+	font-weight: 700;
+}
+
+.subField{
+	list-style: none;
+	margin-top: 15px;
+	background-color: #1B5079;
+	padding-left: 0px;
+}
+
+.subField li{
+	margin-left: 20px;
+}
+
+.subField li ul li{
+	margin-left: 20px;
+}
+
+#closeSessionModal{
+	z-index: 1300;
+}
+
+#closeSessionModal{
+	color: #ffffff;
+}
+
+@media (max-width: 576px){
+	.sideBar{
+		position: fixed;
+		top: 0;
+		left: -100%;
+		width: 100%;
+		height: 100%;
+		background-color: #1B5079;
+		z-index: 2000;
+		box-sizing: border-box;
+		transition: 0.3s;
+	}
+
+	.subField{
+		text-align: left;
+	}
+
+	#closeSessionModal
+	.modal-footer{
+		flex-wrap: wrap;
+	}
+
+	#closeSessionButtonModal{
+		margin-bottom: 10px;
+	}
+}

@@ -1,0 +1,84 @@
+{% extends "dashboard/base.html" %}
+
+{% load staticfiles %}
+
+{% block link_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard/base.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+<style media="screen">
+  .table td {
+    text-align: center;
+  },
+  .table th {
+    text-align: center;
+  }
+  .table tr {
+    text-align: center;
+  }
+</style>
+{% endblock link_css %}
+
+{% block content %}
+{% include 'header.html' %}
+<div class="darkscreen">
+</div>
+<div class="container col-12" style="heigth:100%; padding: 0 !important;">
+  <div class="row" style="width: 100%;margin-top: 2px;margin-bottom:2px;">
+    <div class="col-12">
+      <div class="form-group">
+        <label for="subject_select">Seleccionar una asignatura</label>
+        <select class="form-control" id="subject_select" onchange="searchMonitorsForSubject()">
+          <option value="-1" selected disabled>Seleccione una asignatura</option>
+          {% for subject in subjects %}
+          <option value="{{ subject.pk }}">{{ subject }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="height: 50px; width: 100%;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Monitor</th>
+          <th scope="col">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for monitor in monitors %}
+        <tr>
+          <td>{{ monitor }}</td>
+          <td>
+            <a href="/dashboard/student/monitor/{{ id_subject }}/{{ monitor.pk }}/">Solicitar</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<form method="post" hidden>{% csrf_token %}
+  <input type="text" name="id_subject">
+  <input type="submit" name="request_info">
+</form>
+
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+  function searchMonitorsForSubject() {
+    var id_subject = $("#subject_select").val();
+    if (id_subject) {
+      $("input[name=id_subject]").val(id_subject);
+      $("input[name=request_info]").trigger('click');
+    }
+  }
+
+  $(document).ready(() => {
+    {% if show_alert %}
+    bootbox.alert("{{ message }}");
+    {% endif %}
+  });
+</script>
+{% endblock %}

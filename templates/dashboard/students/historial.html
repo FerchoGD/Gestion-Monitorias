@@ -1,0 +1,97 @@
+{% extends "dashboard/base.html" %}
+
+{% load staticfiles %}
+
+{% block link_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard/base.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+<style media="screen">
+  .table td {
+    text-align: center;
+  },
+  .table th {
+    text-align: center;
+  }
+  .table tr {
+    text-align: center;
+  }
+</style>
+{% endblock link_css %}
+
+{% block content %}
+{% include 'header.html' %}
+<div class="darkscreen">
+</div>
+<div class="container col-12" style="heigth: 100%;padding: 0 !important;">
+  <div class="row" style="height: 50px; width: 100%;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Asignatura</th>
+          <th scope="col">Monitor</th>
+          <th scope="col">Hora</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Finalizar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for solicitud in solicitudes %}
+        <tr>
+          <td>{{ solicitud.subject }}</td>
+          <td>{{ solicitud.monitor.user.first_name }} {{ solicitud.monitor.user.last_name }}</td>
+          <td>{{ solicitud.time_slot.start_time }} - {{ solicitud.time_slot.end_time }}</td>
+          <td>{{ solicitud.requested_time }}</td>
+          {% if solicitud.state == 'Requested' %}
+          <td style="color: #FFB300; font-weight: bold;">En revisión</td>
+          {% elif solicitud.state == 'Accepted' %}
+          <td style="color: #66BB6A; font-weight: bold;">Aceptada</td>
+          {% elif solicitud.state == 'Declined' %}
+          <td style="color: #F44336; font-weight: bold;">Rechazada</td>
+          {% elif solicitud.state == 'FinishedEstudent' %}
+          <td style="color: rgb(4, 51, 10); font-weight: bold;">Finalizada</td>
+          {% elif solicitud.state == 'FinishedMonitor' %}
+          <td style="color: #03A9F4; font-weight: bold;">Por finalizar</td>
+          {% endif %} 
+          {% if solicitud.state == 'FinishedMonitor' %}
+          <td>
+            <div class="col-12">
+              <a href="#"   onclick="FinaliceRequest({{ solicitud.pk }})" >
+                <i class="fas fa-check" style="color:{% if solicitud.state == 'FinishedMonitor' %} green {% else %} #c4c5c4 {% endif %}; font-size: 25px;"></i>
+              </a>
+            </div>
+          </td>
+          {% else %}
+          <td>
+            <div class="col-12">
+                <i class="fas fa-times-circle" style="color:#c4c5c4; font-size: 25px;"></i>
+            </div>
+            </td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<form id="finalice-form" method="post" hidden>{% csrf_token %}
+  <input type="text" name="id_solicitude">
+  <input type="submit" name="finalice">
+</form>
+
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">$(document).ready(() => {
+    {% if show_alert %}
+    bootbox.alert("{{ message }}");
+    {% endif %}
+  });
+
+  function FinaliceRequest(id_solicitude) {    
+    $("#finalice-form input[name=id_solicitude]").val(id_solicitude);
+    $("#finalice-form input[name=finalice]").trigger('click');
+  }
+</script>
+{% endblock %}

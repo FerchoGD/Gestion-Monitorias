@@ -1,0 +1,131 @@
+{% extends "dashboard/base.html" %}
+
+{% load staticfiles %}
+{% load hour_in_slots %}
+
+{% block link_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard/base.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+<style media="screen">
+  body {
+    overflow-x: hidden !important;
+  }
+  .table td {
+    text-align: center;
+  },
+  .table th {
+    text-align: center;
+  }
+  .table tr {
+    text-align: center;
+  }
+  .cell {
+    border: 1px solid gray;
+    height: 10px;
+    padding: 0px !important;
+  }
+  .selected {
+    background-color: blue;
+  }
+</style>
+{% endblock link_css %}
+
+{% block content %}
+{% include 'header.html' %}
+<div class="darkscreen">
+</div>
+<div class="container col-12" style="heigth: 100%;padding: 0 !important;">
+  <div class="row" style="height: 50px; width: 100%; background-color: blue;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Lunes</th>
+          <th scope="col">Martes</th>
+          <th scope="col">Miércoles</th>
+          <th scope="col">Jueves</th>
+          <th scope="col">Viernes</th>
+          <th scope="col">Sábado</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for hour in data %}
+        <tr>
+          <th class="cell" scope="col">{{ hour }}:00</th>
+          <td class="cell {% if hour|concat:1|hour_in_slots_duple:slots %}selected{% endif %}"
+            scope="col"
+            {% if hour|concat:1|hour_in_slots_duple:slots %}
+              onclick="soliciteThisHour({{ hour }}, 1, {{ hour|concat:1|get_id_from_duple:slots }})"
+            {% endif %}
+            id="{{ hour }}-1"
+          ></td>
+          <td class="cell {% if hour|concat:2|hour_in_slots_duple:slots %}selected{% endif %}"
+            scope="col"
+            {% if hour|concat:2|hour_in_slots_duple:slots %}
+              onclick="soliciteThisHour({{ hour }}, 2, {{ hour|concat:2|get_id_from_duple:slots }})"
+            {% endif %}
+            id="{{ hour }}-2"
+          ></td>
+          <td class="cell {% if hour|concat:3|hour_in_slots_duple:slots %}selected{% endif %}"
+            scope="col"
+            {% if hour|concat:3|hour_in_slots_duple:slots %}
+              onclick="soliciteThisHour({{ hour }}, 3, {{ hour|concat:3|get_id_from_duple:slots }})"
+            {% endif %}
+            id="{{ hour }}-3"
+          ></td>
+          <td class="cell {% if hour|concat:4|hour_in_slots_duple:slots %}selected{% endif %}"
+            scope="col"
+            {% if hour|concat:4|hour_in_slots_duple:slots %}
+              onclick="soliciteThisHour({{ hour }}, 4, {{ hour|concat:4|get_id_from_duple:slots }})"
+            {% endif %}
+            id="{{ hour }}-4"
+          ></td>
+          <td class="cell {% if hour|concat:5|hour_in_slots_duple:slots %}selected{% endif %}"
+            scope="col"
+            {% if hour|concat:5|hour_in_slots_duple:slots %}
+              onclick="soliciteThisHour({{ hour }}, 5, {{ hour|concat:5|get_id_from_duple:slots }})"
+            {% endif %}
+            id="{{ hour }}-5"
+          ></td>
+          <td class="cell {% if hour|concat:6|hour_in_slots_duple:slots %}selected{% endif %}"
+            scope="col"
+            {% if hour|concat:6|hour_in_slots_duple:slots %}
+              onclick="soliciteThisHour({{ hour }}, 6, {{ hour|concat:6|get_id_from_duple:slots }})"
+            {% endif %}
+            id="{{ hour }}-6"
+          ></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<form method="post" hidden>{% csrf_token %}
+  <input type="text" name="id_slot_selected">
+  <input type="text" name="weekday">
+  <input type="submit" name="set_solicitude">
+</form>
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+  function soliciteThisHour(hour, day, id_slot) {
+    console.log(hour, day, id_slot);
+    $("input[name=id_slot_selected]").val(id_slot);
+    $("input[name=weekday]").val(day);
+    $("input[name=set_solicitude]").trigger('click');
+    console.log("SENDED");
+  }
+
+  $(document).ready(() => {
+    $("#deleteAdminSubmit").click(() => {
+      $("input[name=delete-monitor]").trigger('click');
+    })
+
+    {% if show_alert %}
+    bootbox.alert("{{ message }}");
+    {% endif %}
+  });
+</script>
+{% endblock %}

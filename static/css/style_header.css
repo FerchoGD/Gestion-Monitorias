@@ -1,0 +1,148 @@
+header{
+	background-color: #1B5079;
+	padding: 10px 20px;
+	display: inline-flex;
+	width: 100%;
+	box-sizing: border-box;
+	align-items: center;
+	justify-content: space-between;
+}
+
+#leftSide{
+	display: inline-flex;
+	align-items: center;
+}
+
+#sidebarButton{
+	margin-right: 30px;
+	height: 100%;
+}
+
+.closeSessionLink{
+	color: #dc3545;
+	font-weight: 700;
+}
+
+#sidebarButton
+.fa-bars{
+	color: #ffffff;
+	font-size: 30px;
+}
+
+#profileSide{
+	display: inline-flex;
+	color: white;
+	font-weight: 500;
+	font-size: 18px;
+	align-items: center;
+}
+
+#profileSide
+#homeButton{
+	color: white;
+	text-decoration: none;
+	padding: 0 15px;
+	border-right: 0.25px solid #ffffff;
+}
+
+#profileSide
+#profileName{
+		margin: 0 10px 0 15px;
+		font-family: 'Quicksand', sans-serif;
+		color: #ffffff;
+		font-size: 18px;
+		font-weight: 500;
+}
+
+#profileSide
+.fa-user-circle{
+	font-size: 30px;
+	color: #ffffff;
+}
+
+#profileSide
+.btn-link:hover,
+#profileSide
+.btn-link:active,
+#profileSide
+.btn-link:visited {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+#responsiveSide{
+	display: none;
+}
+
+@media (max-width: 768px){
+	header {
+    	padding: 10px 10px;
+	}
+
+	#profileSide
+	.btn{
+		padding: 0;
+	}
+}
+
+@media (max-width: 576px){
+	header {
+	    padding: 10px 10px;
+	}
+
+	#leftSide,
+	#profileSide{
+		display: none;
+	}
+
+	#responsiveSide{
+		display: inline-flex;
+		width: 100%;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	#sidebarButtonResp
+	.fa-bars{
+		color: #ffffff;
+		font-size: 30px;
+	}
+
+	#sidebarButtonResp{
+		float: left;
+	}
+
+	#logoResp{
+		text-align: center;
+	}
+
+	#logoResp
+	img{
+		width: 160px;
+	}
+
+	#profileSideResp{
+		float:right;
+	}
+
+	#profileSideResp
+	.btn{
+		padding: 0;
+	}
+
+	#profileSideResp
+	.fa-user-circle{
+		font-size: 30px;
+		color: #ffffff;
+	}
+
+	#profileSideResp
+	.btn-link:hover,
+	#profileSideResp
+	.btn-link:active,
+	#profileSideResp
+	.btn-link:visited {
+	    color: #ffffff;
+	    text-decoration: none;
+	}
+}

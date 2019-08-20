@@ -1,0 +1,86 @@
+{% extends "dashboard/base.html" %}
+
+{% load staticfiles %}
+
+{% block link_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard/base.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+<style media="screen">
+  .table td {
+    text-align: center;
+  },
+  .table th {
+    text-align: center;
+  }
+  .table tr {
+    text-align: center;
+  }
+</style>
+{% endblock link_css %}
+
+{% block content %}
+{% include 'header.html' %}
+<div class="darkscreen">
+</div>
+<div class="container col-12" style="heigth:100%;padding: 0 !important;">
+  <div class="row" style="width: 100%;margin-top: 10px;margin-bottom:2px;">
+    <div class="col-12">
+      <div class="form-group">
+        <label for="student_select" style="font-weight:bold">Seleccionar un estudiante</label>
+        <select class="form-control" id="student_select" onchange="searchSolicitudesForStudent()">
+          <option value="-1" selected disabled>Seleccione un estudiante</option>
+          {% for student in students %}
+          <option  value="{{ student.pk }}">{{ student.user.first_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="height: 50px; width: 100%;">
+    <table class="table">
+      <thead>
+        <tr>
+            <th scope="col">Asignatura</th>
+            <th scope="col">Hora</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for solicitud in solicitudes %}
+        <tr>
+            <td>{{ solicitud.subject }}</td>
+            <td>{{ solicitud.time_slot.start_time }} - {{ solicitud.time_slot.end_time }}</td>
+            <td>{{ solicitud.requested_time }}</td>
+            <td style="color: #66BB6A; font-weight: bold;">Aceptada</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<form method="post" hidden>{% csrf_token %}
+  <input type="text" name="id_student">
+  <input type="submit" name="request_info">
+</form>
+
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+  function searchSolicitudesForStudent() {
+    var id_student = $("#student_select").val();
+    if (id_student) {
+      $("input[name=id_student]").val(id_student);
+      $("input[name=request_info]").trigger('click');
+    }
+  }
+
+  $(document).ready(() => {
+    {% if show_alert %}
+    bootbox.alert("{{ message }}");
+    {% endif %}
+  });
+</script>
+{% endblock %}

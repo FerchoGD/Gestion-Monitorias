@@ -1,0 +1,66 @@
+{% extends "dashboard/base.html" %}
+
+{% load staticfiles %}
+
+{% block link_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard/base.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+{% endblock link_css %}
+
+{% block content %}
+{% include 'header.html' %}
+<div class="darkscreen">
+</div>
+<div class="container col-12">
+  <h4 class="title-create-admin">Editar monitor</h4>
+</div>
+<div class="container col-12">
+  <form method="POST">{% csrf_token %}
+    <div class="form-group">
+      <label for="name-monitor">Nombres</label>
+      <input type="text" class="form-control" value="{{ name_monitor }}" name="name-monitor" aria-describedby="nameHelp" placeholder="Nombres del monitor" required>
+      <small id="nameHelp" class="form-text text-muted">Nombres del monitor</small>
+    </div>
+    <div class="form-group">
+      <label for="last-name-monitor">Apellidos</label>
+      <input type="text" class="form-control" value="{{ last_name_monitor }}" name="last-name-monitor" aria-describedby="lastNameHelp" placeholder="Apellidos del monitor" required>
+      <small id="lastNameHelp" class="form-text text-muted">Apellidos del monitor</small>
+    </div>
+    <div class="form-group">
+      <label for="dni-monitor">Documento</label>
+      <input type="number" min="0" class="form-control" value="{{ dni_monitor }}" name="dni-monitor" aria-describedby="dniHelp" placeholder="Documento del monitor" required>
+      <small id="dniHelp" class="form-text text-muted">Documento del monitor</small>
+    </div>
+    <div class="form-group">
+      <label for="email-monitor">Correo electrónico</label>
+      <input type="email" class="form-control" value="{{ email }}" name="email-monitor" aria-describedby="emailHelp" placeholder="Ingrese el correo electrónico @utp.edu.co del monitor" required>
+      <small id="emailHelp" class="form-text text-muted">Correo electrónico del monitor</small>
+    </div>
+    <h6 style="color: crimson">Para cambiar la contraseña debes ingresar la contraseña actual</h6>
+    <h6 style="color: gray">"Cuando cambies la contraseña debes iniciar nuevamente"</h6>
+    <div class="form-group">
+      <label for="password1-monitor">Contraseña actual</label>
+      <input type="password" class="form-control" value="{{ password1_monitor }}" name="password1-monitor" placeholder="Ingrese la contraseña">
+      </div>
+    <div class="form-group">
+      <label for="password2-monitor">Contraseña nueva</label>
+      <input type="password" class="form-control" value="{{ password2_monitor }}" name="password2-monitor" placeholder="Ingrese la contraseña">
+    </div>
+    <div class="form-group">
+      <label for="password3-monitor">Contraseña nueva</label>
+      <input type="password" class="form-control" value="{{ password3_monitor }}" name="password3-monitor" placeholder="Ingrese la contraseña">
+    </div>
+    <button type="submit" class="btn btn-primary col-12" style="margin-top: 20px;">Editar monitor</button>
+  </form>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+  $(document).ready(() => {
+    {% if show_alert %}
+    bootbox.alert("{{ message }}");
+    {% endif %}
+  });
+</script>
+{% endblock %}

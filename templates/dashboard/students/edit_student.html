@@ -1,0 +1,62 @@
+{% extends "dashboard/base.html" %}
+
+{% load staticfiles %}
+
+{% block link_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard/base.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+{% endblock link_css %}
+
+{% block content %}
+{% include 'header.html' %}
+<div class="darkscreen">
+</div>
+<div class="container col-12">
+  <h4 class="title-create-admin">Editar monitor</h4>
+</div>
+<div class="container col-12">
+  <form method="POST">{% csrf_token %}
+    <div class="form-group">
+      <label for="name-student">Nombres</label>
+      <input type="text" class="form-control" value="{{ name_student }}" name="name-student" aria-describedby="nameHelp" placeholder="Nombres del monitor" required>
+      <small id="nameHelp" class="form-text text-muted">Nombres del monitor</small>
+    </div>
+    <div class="form-group">
+      <label for="last-name-student">Apellidos</label>
+      <input type="text" class="form-control" value="{{ last_name_student }}" name="last-name-student" aria-describedby="lastNameHelp" placeholder="Apellidos del monitor" required>
+      <small id="lastNameHelp" class="form-text text-muted">Apellidos del monitor</small>
+    </div>
+    <div class="form-group">
+      <label for="email-student">Correo electrónico</label>
+      <input type="email" class="form-control" value="{{ email }}" name="email-student" aria-describedby="emailHelp" placeholder="Ingrese el correo electrónico @utp.edu.co del monitor" required>
+      <small id="emailHelp" class="form-text text-muted">Correo electrónico del monitor</small>
+    </div>
+    <h6 style="color: crimson">Para cambiar la contraseña debes ingresar la contraseña actual</h6>
+    <h6 style="color: gray">"Cuando cambies la contraseña debes iniciar nuevamente"</h6>
+
+    <div class="form-group">
+      <label for="password1-student">Contraseña actual</label>
+      <input type="password" class="form-control" value="{{ password1_student }}" name="password1-student" placeholder="Ingrese la contraseña">
+      </div>
+    <div class="form-group">
+      <label for="password2-student">Contraseña nueva</label>
+      <input type="password" class="form-control" value="{{ password2_student }}" name="password2-student" placeholder="Ingrese la contraseña">
+    </div>
+    <div class="form-group">
+      <label for="password3-student">Contraseña nueva</label>
+      <input type="password" class="form-control" value="{{ password3_student }}" name="password3-student" placeholder="Ingrese la contraseña">
+    </div>
+    <button type="submit" class="btn btn-primary col-12" style="margin-top: 20px;">Editar monitor</button>
+  </form>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+  $(document).ready(() => {
+    {% if show_alert %}
+    bootbox.alert("{{ message }}");
+    {% endif %}
+  });
+</script>
+{% endblock %}

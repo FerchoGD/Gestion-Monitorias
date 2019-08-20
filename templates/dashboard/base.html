@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="pragma" content="no-cache" />
+
+    <title>MonitoriasUtp</title>
+
+    {% load staticfiles %}
+
+    <style media="screen">
+      #sideBarListMenu li a {
+        margin-left: 0 !important;
+      }
+      .subField li {
+        margin-left: 0 !important;
+      }
+    </style>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link
+      rel="stylesheet"
+      href="{% static 'css/jquery.mCustomScrollbar.min.css' %}">
+
+    <link href="//fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+    <!--header-->
+  	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  	<link rel="stylesheet" type="text/css" href="{% static 'css/style_header.css' %}">
+  	<link rel="stylesheet" type="text/css" href="{% static 'css/style_sidebar.css' %}">
+
+    <script
+      defer
+      src="{% static 'js/solid.js' %}"></script>
+    <script
+      defer
+      src="{% static 'js/fontawesome.js' %}"></script>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+      <style media="screen">
+        .hidden-md-down {
+          display: initial;
+        }
+
+        .modal.right .modal-dialog {
+          position: fixed;
+          margin: auto;
+          width: 400px;
+          height: 100%;
+          -webkit-transform: translate3d(0%, 0, 0);
+          -ms-transform: translate3d(0%, 0, 0);
+          -o-transform: translate3d(0%, 0, 0);
+          transform: translate3d(0%, 0, 0);
+        }
+
+        .modal.right .modal-content {
+          height: 100%;
+          overflow-y: auto;
+        }
+
+        .modal.right.fade .modal-dialog {
+          right: -400px;
+          -webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+          -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+          -o-transition: opacity 0.3s linear, right 0.3s ease-out;
+          transition: opacity 0.3s linear, right 0.3s ease-out;
+        }
+
+        .modal.right.fade.show .modal-dialog {
+          right: 0;
+        }
+
+        /* ----- MODAL STYLE ----- */
+        .modal-content {
+          border-radius: 0;
+          border: none;
+        }
+
+        .modal-header {
+          border-bottom-color: #eeeeee;
+          color: black;
+          background-color: white;
+        }
+
+        .demo {
+          padding-top: 60px;
+          padding-bottom: 110px;
+        }
+
+        .btn-demo {
+          margin: 15px;
+          padding: 10px 15px;
+          border-radius: 0;
+          font-size: 16px;
+          background-color: #ffffff;
+        }
+
+        .btn-demo:focus {
+          outline: 0;
+        }
+      </style>
+
+    {% block link_css %}
+    {% endblock link_css %}
+
+</head>
+<body style="background: #FFFFFF">
+    {% block content %}
+    {% endblock content %}
+
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- jQuery Custom Scroller CDN -->
+    <script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+
+    <script type="text/javascript">
+       $(document).ready(function () {
+           $("#sidebar").mCustomScrollbar({
+               theme: "minimal"
+           });
+
+           $('#dismiss, .overlay').on('click', function () {
+               $('#sidebar').removeClass('active');
+               $('.overlay').removeClass('active');
+           });
+
+           $('#sidebarCollapse').on('click', function () {
+               $('#sidebar').addClass('active');
+               $('.overlay').addClass('active');
+               $('.collapse.in').toggleClass('in');
+               $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+           });
+       });
+    </script>
+
+    <script type="text/javascript">
+      $(document).ready(() => {
+        $("#contact").click(() => {
+          let formContact = $("#contactForm");
+          formContact.submit();
+        });
+      });
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128387845-1"></script> -->
+    <!-- <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-128387845-1');
+    </script> -->
+
+
+    {% block scripts %}{% endblock scripts %}
+    <!--header-->
+  	<script type="text/javascript" src="{% static 'js/header_sidebar.js' %}"></script>
+    <script src="{% static 'js/bootbox.all.min.js' %}"></script>
+</body>
+</html>

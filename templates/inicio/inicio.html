@@ -1,0 +1,43 @@
+{% extends "dashboard/base.html" %}
+
+{% load staticfiles %}
+
+{% block link_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard/base.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+{% endblock link_css %}
+
+{% block content %}
+{% include 'headerInicio.html' %}
+<body>
+  <div id="logo-container" style="display: flex; align-items: center; justify-content: center; padding:20px">
+      <img id="iamgeInicio" src="{% static 'img/isc-logo.png' %}">
+  </div>
+  <p style="padding: 35px">
+      La Universidad Tecnológica de Pereira, creada por la Ley 41 de 1958, es un ente
+      universitario autónomo del orden nacional, con régimen especial, con personería 
+      jurídica, autonomía administrativa, académica, financiera y patrimonio independiente,
+      vinculado al Ministerio de Educación Nacional, cuyo objeto es la educación superior,
+      la investigación y la extensión.
+      La Universidad Tecnológica de Pereira, tendrá como sede principal la ciudad de Pereira.
+      Podrá crear y organizar Sedes o Dependencias en otros Municipios y participa
+      en la creación de otras entidades, así como adelantar planes, programas y
+      proyectos por sí sola o en cooperación con otras entidades públicas o privadas
+      y especialmente con universidades e institutos de investigación del Estado.</p>
+</body>
+
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+  $(document).ready(() => {
+    {% if show_alert %}
+    bootbox.alert("{{ message }}");
+    {% endif %}
+  });
+</script>
+{% endblock %}
+
+<style>
+  
+</style>

@@ -1,0 +1,206 @@
+{% extends "dashboard/base.html" %}
+
+{% load staticfiles %}
+
+{% block link_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard/base.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+<style media="screen">
+  .table td {
+    text-align: center;
+  },
+  .table th {
+    text-align: center;
+  }
+  .table tr {
+    text-align: center;
+  }
+</style>
+{% endblock link_css %}
+
+{% block content %}
+{% include 'header.html' %}
+<div class="darkscreen">
+</div>
+<div class="container col-12" style="heigth: 100%;padding: 0 !important;">
+  <div class="row" style="height: 50px; width: 100%; background-color: blue;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellidos</th>
+          <th scope="col">Correo</th>
+          <th scope="col">Actualizar</th>
+          <th scope="col">Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for monitor in monitors %}
+        <tr>
+          <td>{{ monitor.user.first_name }}</td>
+          <td>{{ monitor.user.last_name }}</td>
+          <td>{{ monitor.user.email }}</td>
+          <td>
+            <a href="#" onclick="getInfoForm({{ monitor.pk }})">
+              <i class="fas fa-pencil-alt"></i>
+            </a>
+          </td>
+          <td>
+            <a href="#" onclick="deleteMonitorOpenModal({{ monitor.pk }}, '{{ monitor.user.first_name }} {{ monitor.user.last_name }}')">
+              <i class="fas fa-trash"></i>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<button
+  style="position:absolute;bottom:15px;right:15px;border-radius:50%;"
+  class="btn pmd-btn-fab pmd-ripple-effect btn-primary pmd-btn-raised"
+  type="button">
+  <a href="#" onclick="openModalCreateMonitor()">
+    <i class="material-icons pmd-sm">add</i>
+  </a>
+</button>
+
+<form id="form-delete-monitor" method="post" hidden>{% csrf_token %}
+  <input type="text" name="id_monitor" hidden>
+  <input type="submit" name="delete-monitor">
+</form>
+
+<form id="get-info-monitor" method="post" hidden>{% csrf_token %}
+  <input type="text" name="id_monitor" hidden>
+  <input type="submit" name="get-info-monitor">
+</form>
+
+<div class="modal fade" id="deleteAdminModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <p class="modal-title" id="create-monitor-modalLongTitle">Eliminar monitor</p>
+      </div>
+      <div class="modal-body littleModalBody">
+    <div class="totalValueDiv">
+      <p id="delete-name-monitor" class="modalText">¿Estás seguro de eliminar al monitor ?</p>
+    </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#" id="deleteAdminSubmit" class="btn btn-danger btn-lg col-12 col-sm-6 col-md-6">Eliminar</a>
+        <button type="button" data-dismiss="modal" id="backButton" class="btn btn-secondary btn-lg col-12 col-sm-6 col-md-6">Volver</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="create-monitor-modal" tabindex="-1" role="dialog" aria-labelledby="create-monitor-modalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="create-monitor-modalLabel">{% if editting_monitor %}Editar{% else %}Crear{% endif %} monitor</h5>
+      </div>
+      <div class="modal-body">
+        <form method="POST" id="form-create-monitor">{% csrf_token %}
+          {% if id_monitor_editting != 0 %}
+          <input type="number" name="id_monitor" value="{{ id_monitor_editting }}" hidden>
+          {% endif %}
+          <div class="form-group">
+            <label for="name-monitor">Nombres</label>
+            <input type="text" class="form-control" value="{{ name_monitor }}" name="name-monitor" aria-describedby="nameHelp" placeholder="Nombres del monitor" required>
+            <small id="nameHelp" class="form-text text-muted">Nombres del monitor</small>
+          </div>
+          <div class="form-group">
+            <label for="last-name-monitor">Apellidos</label>
+            <input type="text" class="form-control" value="{{ last_name_monitor }}" name="last-name-monitor" aria-describedby="lastNameHelp" placeholder="Apellidos del monitor" required>
+            <small id="lastNameHelp" class="form-text text-muted">Apellidos del monitor</small>
+          </div>
+          <div class="form-group">
+            <label for="dni-monitor">Documento</label>
+            <input type="number" min="0" class="form-control" value="{{ dni_monitor }}" name="dni-monitor" aria-describedby="dniHelp" placeholder="Documento del monitor" required>
+            <small id="dniHelp" class="form-text text-muted">Documento del monitor</small>
+          </div>
+          <div class="form-group">
+            <label for="email-monitor">Correo electrónico</label>
+            <input type="email" class="form-control" value="{{ email }}" name="email-monitor" aria-describedby="emailHelp" placeholder="Ingrese el correo electrónico @utp.edu.co del monitor" required>
+            <small id="emailHelp" class="form-text text-muted">Correo electrónico del monitor</small>
+          </div>
+          <div class="form-group">
+            <label for="fecha-nacimiento-monitor">Fecha de nacimiento</label>
+            <input type="date" class="form-control" value="{{ fecha_nacimiento_monitor|date:'Y-m-d' }}" name="fecha-nacimiento-monitor" aria-describedby="BirdDateHelp" placeholder="Ingrese la fecha de nacimiento del monitor" required>
+            <small id="BirdDateHelp" class="form-text text-muted">Correo electrónico del monitor</small>
+          </div>
+          <div class="form-group">
+            <label for="genders">Genero</label>
+            <select class="form-control" value="{{ gender }}" id="genders" name="gender" required>
+              {% for gender in genders %}
+              <option value="{{ gender }}" {%if gender == genero %}selected{% endif%}>{{ gender }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="hour-monitor">Horas por cumplir</label>
+            <input type="number" min="0" class="form-control" value="{{ horas_por_cumplir }}" name="hours" aria-describedby="hourHelp" placeholder="Horas del monitor" required>
+            <small id="hourHelp" class="form-text text-muted">Documento del monitor</small>
+          </div>
+          {% if not editting_monitor %}
+          <div class="form-group">
+            <label for="password-monitor">Contraseña</label>
+            <input type="password" class="form-control" value="{{ password }}" name="password-monitor" placeholder="Ingrese la contraseña" required>
+          </div>
+          <div class="form-group">
+            <label for="subjects">Asignaturas ligadas</label>
+            <select multiple class="form-control" id="subjects" name="subjects" required>
+              {% for subject in subjects %}
+              <option value="{{ subject.pk }}">{{ subject.name }} - {{ subject.code }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          {% endif %}
+          <button type="submit" name="{% if editting_monitor %}edit{% else %}create{% endif %}-monitor-submit" class="btn btn-primary col-12">{% if editting_monitor %}Editar{% else %}Crear{% endif %} monitor</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+  function openModalCreateMonitor() {
+    $("#form-create-monitor")[0].reset();
+    $("#create-monitor-modal").modal('show');
+  }
+
+  function deleteMonitorOpenModal(id_monitor, name_monitor) {
+    $("input[name=id_monitor]").val(id_monitor);
+    $("#delete-name-monitor").html(`¿Estás seguro de eliminar al monitor ${name_monitor}?`)
+    $("#deleteAdminModal").modal('show');
+  }
+
+  function getInfoForm(id_monitor) {
+    $("#get-info-monitor input[name=id_monitor]").val(id_monitor);
+    $("input[name=get-info-monitor]").trigger('click');
+  }
+
+  $(document).ready(() => {
+    $("#deleteAdminSubmit").click(() => {
+      $("input[name=delete-monitor]").trigger('click');
+    })
+
+    {% if show_alert %}
+    bootbox.alert("{{ message }}", () => {
+      $("#create-monitor-modal").modal('show');
+    });
+    {% endif %}
+
+    {% if editting_monitor %}
+    $("#create-monitor-modal").modal('show');
+    $('#create-monitor-modal').on('hidden.bs.modal', function () {
+      window.location = '/dashboard/admin/';
+    })
+    {% endif %}
+  });
+</script>
+{% endblock %}

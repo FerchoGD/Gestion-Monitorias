@@ -1,0 +1,166 @@
+{% extends "dashboard/base.html" %}
+
+{% load staticfiles %}
+
+{% block link_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard/base.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+<style media="screen">
+  .table td {
+    text-align: center;
+  },
+  .table th {
+    text-align: center;
+  }
+  .table tr {
+    text-align: center;
+  }
+</style>
+{% endblock link_css %}
+
+{% block content %}
+{% include 'header.html' %}
+<div class="darkscreen">
+</div>
+<div class="container col-12" style="heigth: 100%;padding: 0 !important;">
+  <div class="row" style="height: 50px; width: 100%; background-color: blue;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Estudiante</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Horario</th>
+          <th scope="col">Asignatura</th>
+          <th scope="col">Estado</th>
+          {% if solicitud_list %} 
+          <th scope="col">Finalizar</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for solicitude in solicitudes %}
+        <tr>
+          <td>{{ solicitude.user.user.first_name }} {{ solicitude.user.user.last_name }}</td>
+          <td>{{ solicitude.requested_time }}</td>
+          <td>{{ solicitude.time_slot.start_time }} - {{ solicitude.time_slot.end_time }}</td>
+          <td>{{ solicitude.subject }}</td>
+          {% if solicitude.state == 'Accepted' %}
+            <td style="font-weight: bold; color: green;">
+              Aceptado
+            </td>
+          {% elif solicitude.state == 'Declined'%}
+            <td style="font-weight: bold; color: red;">
+              Rechazada
+            </td>
+          {% elif solicitude.state == 'FinishedMonitor'  %}
+            <td style="font-weight: bold; color: rgb(9, 37, 14);">
+              Finalizada
+            </td>
+          {% elif solicitude.state == 'FinishedEstudent'  %}
+            <td style="font-weight: bold; color: rgb(9, 37, 14);">
+              Finalizada
+            </td>
+          {% endif %}
+          {% if solicitud_list %} 
+            <td>
+              <div class="col-12">
+                <a href="#" onclick="acceptRequest({{ solicitude.pk }})">
+                  <i class="fas fa-check" style="color:gray; font-size: 25px;"></i>
+                </a>
+              </div>
+            </td>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<div class="modal fade" id="create-monitor-modal" tabindex="-1" role="dialog" aria-labelledby="create-monitor-modalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="create-monitor-modalLabel">{% if editting_monitor %}Editar{% else %}Crear{% endif %} monitor</h5>
+      </div>
+      <div class="modal-body">
+        <form method="POST" id="form-create-monitor">{% csrf_token %}
+          {% if id_monitor_editting != 0 %}
+          <input type="number" name="id_monitor" value="{{ id_monitor_editting }}" hidden>
+          {% endif %}
+          <div class="form-group">
+            <label for="name-monitor">Nombres</label>
+            <input type="text" class="form-control" value="{{ name_monitor }}" name="name-monitor" aria-describedby="nameHelp" placeholder="Nombres del monitor" required>
+            <small id="nameHelp" class="form-text text-muted">Nombres del monitor</small>
+          </div>
+          <div class="form-group">
+            <label for="last-name-monitor">Apellidos</label>
+            <input type="text" class="form-control" value="{{ last_name_monitor }}" name="last-name-monitor" aria-describedby="lastNameHelp" placeholder="Apellidos del monitor" required>
+            <small id="lastNameHelp" class="form-text text-muted">Apellidos del monitor</small>
+          </div>
+          <div class="form-group">
+            <label for="dni-monitor">Documento</label>
+            <input type="number" min="0" class="form-control" value="{{ dni_monitor }}" name="dni-monitor" aria-describedby="dniHelp" placeholder="Documento del monitor" required>
+            <small id="dniHelp" class="form-text text-muted">Documento del monitor</small>
+          </div>
+          <div class="form-group">
+            <label for="email-monitor">Correo electrónico</label>
+            <input type="email" class="form-control" value="{{ email }}" name="email-monitor" aria-describedby="emailHelp" placeholder="Ingrese el correo electrónico @utp.edu.co del monitor" required>
+            <small id="emailHelp" class="form-text text-muted">Correo electrónico del monitor</small>
+          </div>
+          {% if not editting_monitor %}
+          <div class="form-group">
+            <label for="password-monitor">Contraseña</label>
+            <input type="password" class="form-control" value="{{ password }}" name="password-monitor" placeholder="Ingrese la contraseña" required>
+          </div>
+          {% endif %}
+          <div class="form-group">
+            <label for="subjects">Asignaturas ligadas</label>
+            <select multiple class="form-control" id="subjects" name="subjects" required>
+              {% for subject in subjects %}
+              <option value="{{ subject.pk }}">{{ subject.name }} - {{ subject.code }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" name="{% if editting_monitor %}edit{% else %}create{% endif %}-monitor-submit" class="btn btn-primary col-12">{% if editting_monitor %}Editar{% else %}Crear{% endif %} monitor</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<form id="accept-form" method="post" hidden>{% csrf_token %}
+  <input type="text" name="id_solicitude">
+  <input type="submit" name="accept">
+</form>
+
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+  function acceptRequest(id_solicitude) {
+    $("#accept-form input[name=id_solicitude]").val(id_solicitude);
+    $("#accept-form input[name=accept]").trigger('click');
+  }
+
+  $(document).ready(() => {
+    $("#deleteAdminSubmit").click(() => {
+      $("input[name=delete-monitor]").trigger('click');
+    })
+
+    {% if show_alert %}
+    bootbox.alert("{{ message }}", () => {
+      $("#create-monitor-modal").modal('show');
+    });
+    {% endif %}
+
+    {% if editting_monitor %}
+    $("#create-monitor-modal").modal('show');
+    $('#create-monitor-modal').on('hidden.bs.modal', function () {
+      window.location = '/dashboard/admin/';
+    })
+    {% endif %}
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends "dashboard/base.html" %}
+
+{% load staticfiles %}
+
+{% block link_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard/base.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+<style media="screen">
+  .table td {
+    text-align: center;
+  },
+  .table th {
+    text-align: center;
+  }
+  .table tr {
+    text-align: center;
+  }
+</style>
+{% endblock link_css %}
+
+{% block content %}
+{% include 'header.html' %}
+<div class="darkscreen">
+</div>
+<div class="container col-12" style="heigth: 100%;padding: 0 !important;">
+  <div class="row" style="height: 50px; width: 100%; background-color: blue;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Estudiante</th>
+          <th scope="col">Asignatura</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Horario</th>
+          <th scope="col">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for solicitude in solicitudes %}
+        <tr>
+          <td>{{ solicitude.user }}</td>
+          <td>{{ solicitude.subject }}</td>
+          <td>{{ solicitude.requested_time }}</td>
+          <td>{{ solicitude.time_slot.start_time }} - {{ solicitude.time_slot.end_time }}</td>
+          <td class="row">
+            <div class="col-6">
+              <a href="#" onclick="acceptRequest({{ solicitude.pk }})">
+                <i class="fas fa-check-circle" style="color: green; font-size: 25px;"></i>
+              </a>
+            </div>
+            <div class="col-6">
+              <a href="#" onclick="declineRequest({{ solicitude.pk }})">
+                <i class="fas fa-times" style="color: black; font-size: 25px;"></i>
+              </a>
+            </div>
+          </td>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<form id="accept-form" method="post" hidden>{% csrf_token %}
+  <input type="text" name="id_solicitude">
+  <input type="submit" name="accept">
+</form>
+
+<form id="decline-form" method="post" hidden>{% csrf_token %}
+  <input type="text" name="id_solicitude">
+  <input type="submit" name="decline">
+</form>
+
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+  function acceptRequest(id_solicitude) {
+    $("#accept-form input[name=id_solicitude]").val(id_solicitude);
+    $("#accept-form input[name=accept]").trigger('click');
+  }
+  function declineRequest(id_solicitude) {
+    $("#decline-form input[name=id_solicitude]").val(id_solicitude);
+    $("#decline-form input[name=decline]").trigger('click');
+  }
+
+  $(document).ready(() => {
+    {% if show_alert %}
+    bootbox.alert("{{ message }}", () => {
+      $("#create-monitor-modal").modal('show');
+    });
+    {% endif %}
+  });
+</script>
+{% endblock %}

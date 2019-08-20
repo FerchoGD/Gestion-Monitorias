@@ -1,0 +1,123 @@
+{% extends "dashboard/base.html" %}
+
+{% load staticfiles %}
+{% load hour_in_slots %}
+
+{% block link_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard/base.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+<style media="screen">
+  body {
+    overflow-x: hidden !important;
+  }
+  .table td {
+    text-align: center;
+  },
+  .table th {
+    text-align: center;
+  }
+  .table tr {
+    text-align: center;
+  }
+  .cell {
+    border: 1px solid gray;
+    height: 10px;
+    padding: 0px !important;
+  }
+  .selected {
+    background-color: burlywood;
+  }
+</style>
+{% endblock link_css %}
+
+{% block content %}
+{% include 'header.html' %}
+<div class="darkscreen">
+</div>
+<div class="container col-12" style="heigth: 100%;padding: 0 !important;">
+  <div class="row" style="height: 50px; width: 100%; background-color: blue;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Lunes</th>
+          <th scope="col">Martes</th>
+          <th scope="col">Miércoles</th>
+          <th scope="col">Jueves</th>
+          <th scope="col">Viernes</th>
+          <th scope="col">Sábado</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for hour in data %}
+        <tr>
+          <th class="cell" scope="col">{{ hour }}:00</th>
+          <td class="cell {% if hour|concat:1|hour_in_slots_fun:slots %}selected{% endif %} " scope="col" onclick="checkHour({{ hour }}, 1)" id="{{ hour }}-1"></td>
+          <td class="cell {% if hour|concat:2|hour_in_slots_fun:slots %}selected{% endif %} " scope="col" onclick="checkHour({{ hour }}, 2)" id="{{ hour }}-2"></td>
+          <td class="cell {% if hour|concat:3|hour_in_slots_fun:slots %}selected{% endif %} " scope="col" onclick="checkHour({{ hour }}, 3)" id="{{ hour }}-3"></td>
+          <td class="cell {% if hour|concat:4|hour_in_slots_fun:slots %}selected{% endif %} " scope="col" onclick="checkHour({{ hour }}, 4)" id="{{ hour }}-4"></td>
+          <td class="cell {% if hour|concat:5|hour_in_slots_fun:slots %}selected{% endif %} " scope="col" onclick="checkHour({{ hour }}, 5)" id="{{ hour }}-5"></td>
+          <td class="cell {% if hour|concat:6|hour_in_slots_fun:slots %}selected{% endif %} " scope="col" onclick="checkHour({{ hour }}, 6)" id="{{ hour }}-6"></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<form method="post" hidden>{% csrf_token %}
+  <input type="text" name="data_schedule">
+  <input type="submit" id="send_schedule">
+</form>
+
+<button
+  style="position:absolute;bottom:15px;right:15px;border-radius:50%;background-color: green;"
+  class="btn pmd-btn-fab pmd-ripple-effect btn-primary pmd-btn-raised"
+  type="button">
+  <a href="#" onclick="saveSchedule()">
+    <i class="material-icons pmd-sm">check</i>
+  </a>
+</button>
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+  function saveSchedule() {
+    var slots = $(".selected");
+
+    if (slots.length === 0) {
+      alert('Selecciona al menos una franja horaria');
+      return;
+    }
+
+    var data = '';
+
+    for (var item of slots) {
+      data += `${item.id},`
+    }
+
+    data = data.substring(0, data.length-1);
+
+    $("input[name=data_schedule]").val(data);
+    $("#send_schedule").trigger('click');
+  }
+
+  function checkHour(hour, day) {
+    if ($(`#${hour}-${day}`).hasClass('selected')) {
+      $(`#${hour}-${day}`).removeClass('selected');
+    } else {
+      $(`#${hour}-${day}`).addClass('selected');
+    }
+  }
+
+  $(document).ready(() => {
+    $("#deleteAdminSubmit").click(() => {
+      $("input[name=delete-monitor]").trigger('click');
+    })
+
+    {% if show_alert %}
+    bootbox.alert("{{ message }}");
+    {% endif %}
+  });
+</script>
+{% endblock %}

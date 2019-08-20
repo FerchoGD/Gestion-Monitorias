@@ -1,0 +1,73 @@
+{% extends "dashboard/base.html" %}
+
+{% load staticfiles %}
+
+{% block link_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard/base.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+{% endblock link_css %}
+
+{% block content %}
+{% include 'headerInicio.html' %}
+<div class="darkscreen">
+</div>
+<div class="container col-12">
+  <h4 class="title-create-admin">Registro estudiante</h4>
+</div>
+<div class="container col-12">
+  <form method="POST">{% csrf_token %}
+    <div class="form-group">
+      <label for="name-student">Nombres</label>
+      <input type="text" class="form-control" value="{{ name_student }}" name="name-student" aria-describedby="nameHelp" placeholder="Nombres del estudiante" required>
+      <small id="nameHelp" class="form-text text-muted">Nombres del estudiante</small>
+    </div>
+    <div class="form-group">
+      <label for="last-name-student">Apellidos</label>
+      <input type="text" class="form-control" value="{{ last_name_student }}" name="last-name-student" aria-describedby="lastNameHelp" placeholder="Apellidos del estudiante" required>
+      <small id="lastNameHelp" class="form-text text-muted">Apellidos del estudiante</small>
+    </div>
+    <div class="form-group">
+      <label for="dni-student">Documento</label>
+      <input type="number" min="0" class="form-control" value="{{ dni_student }}" name="dni-student" aria-describedby="dniHelp" placeholder="Documento del estudiante" required>
+      <small id="dniHelp" class="form-text text-muted">Documento del estudiante</small>
+    </div>
+    <div class="form-group">
+      <label for="email-student">Correo electrónico</label>
+      <input type="email" class="form-control" value="{{ email_student }}" name="email-student" aria-describedby="emailHelp" placeholder="Ingrese el correo electrónico @utp.edu.co del estudiante" required>
+      <small id="emailHelp" class="form-text text-muted">Correo electrónico del estudiante</small>
+    </div>
+    <div class="form-group">
+        <label for="fecha-nacimiento-student">Fecha de nacimiento</label>
+        <input type="date" class="form-control" value="{{ fecha_nacimiento_student|date:'Y-m-d' }}" name="fecha-nacimiento-student" aria-describedby="BirdDateHelp" placeholder="Ingrese la fecha de nacimiento del student" required>
+        <small id="BirdDateHelp" class="form-text text-muted"></small>
+      </div>
+    <div class="form-group">
+      <label for="genders">Genero</label>
+      <select class="form-control" value="{{ gender }}" id="genders" name="gender" required>
+        {% for gender in genders %}
+        <option value="{{ gender }}" {%if gender == genero %}selected{% endif%}>{{ gender }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="password-student">Contraseña</label>
+      <input type="password" class="form-control" value="{{ password1_student }}" name="password1-student" placeholder="Ingrese la contraseña" required>
+    </div>
+    <div class="form-group">
+        <label for="password-student">Repetir contraseña</label>
+        <input type="password" class="form-control" value="{{ password2_student }}" name="password2-student" placeholder="Ingrese la contraseña" required>
+      </div>
+    <button type="submit" class="btn btn-primary col-12" style="margin-top: 20px;">Crear estudiante</button>
+  </form>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+  $(document).ready(() => {
+    {% if show_Alert %}
+    bootbox.alert("{{ message }}");
+    {% endif %}
+  });
+</script>
+{% endblock %}

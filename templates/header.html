@@ -1,0 +1,124 @@
+{% load staticfiles %}
+<div class="sideBar">
+  <div id="sideBarLogo" style="max-height: 60px;">
+    <img id="sideBarLogoImg" src="{% static 'img/isc-logo.png' %}" style="max-width: 50px;">
+    <a id="closeSideBar" href="#" role="button">
+      <i class="fas fa-times"></i>
+    </a>
+  </div>
+  <div id="sideBarContent">
+    <ul id="sideBarListMenu">
+      {% if show_superuser_items %}
+      <li>
+        <a class="buttonShow" href="#">Superusuario</a>
+        <ul class="subField">
+          <li><a href="/dashboard/superuser/">Gestión admin</a></li>
+        </ul>
+      </li>
+      {% endif %}
+      {% if show_admins_items %}
+      <li>
+        <a class="buttonShow" href="#">Administrador</a>
+        <ul class="subField">
+          <li><a href="/dashboard/admin/profile/{{ id_admin }}/">Editar perfil</a></li>
+          <li><a href="/dashboard/admin/">Gestión de monitores</a></li>
+          <li><a href="/dashboard/admin/students/">Gestión de estudiantes</a></li>
+          <li><a href="/dashboard/admin/historial/monitors/">Historial de monitores</a></li>
+          <li><a href="/dashboard/admin/historial/students/">Historial de estudiantes</a></li>
+        </ul>
+      </li>
+      {% endif %}
+      {% if show_monitor_items %}
+      <li>
+        <a class="buttonShow" href="#">Monitores</a>
+        <ul class="subField">
+          <li><a href="/dashboard/monitor/profile/{{ id_monitor }}/">Editar perfil</a></li>
+          <li><a href="/dashboard/monitor/accept/">Aprobar monitoria</a></li>
+          <li><a href="/dashboard/monitor/solicitudes/">Ver monitorias pendientes</a></li>
+          <li><a href="/dashboard/monitor/historial/">Ver histórico de monitorias</a></li>
+          <li><a href="/dashboard/monitor/schedule/">Horario</a></li>
+        </ul>
+      </li>
+      {% endif %}
+      {% if show_students_items %}
+      <li>
+        <a class="buttonShow" href="#">Estudiantes</a>
+        <ul class="subField">
+          <li><a href="/dashboard/student/profile/{{ id_student }}/">Editar perfil</a></li>
+          <li><a href="/dashboard/student/request/">Solicitar monitoria</a></li>
+          <li><a href="/dashboard/student/historial/">Ver monitorias</a></li>
+        </ul>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+  <div id="closeSessionDiv">
+    <button id="closeSessionButton" data-toggle="modal" data-target="#closeSessionModal" class="btn col-12 btn-danger">Cerrar sesión</button>
+  </div>
+</div>
+
+<header style="max-height:60px;">
+  <div id="leftSide">
+    <a id="sidebarButton" href="#">
+      <i class="fas fa-bars"></i>
+    </a>
+    <img src="{% static 'img/isc-logo.png' %}" style="max-width: 120px;">
+  </div>
+  <div id="responsiveSide">
+    <a id="sidebarButtonResp" href="#">
+      <i class="fas fa-bars"></i>
+    </a>
+    <img src="{% static 'img/isc-logo.png' %}" style="max-width: 120px;">
+    <div id="profileSideResp">
+      <div class="dropdown">
+        <a class="btn btn-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown">
+          {% if image_profile == '' %}
+            <img id="iamgeInicio" width="38px" height="38px" src="{% static 'img/default_user.png' %}"></i>
+          {% else %}
+            <img id="iamgeInicio" width="38px" height="38px" src="{{ image_profile.url }}"></i>
+          {% endif %}
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item closeSessionLink" data-toggle="modal" data-target="#closeSessionModal" role="button" href="#">Cerrar sesión</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="profileSide">
+    <p id="profileName">{{ request.user.first_name }} {{ request.user.last_name }}</p>
+    <div class="dropdown">
+      <a class="btn btn-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown">
+        {% if image_profile == '' %}
+          <img id="iamgeInicio" width="38px" height="38px" src="{% static 'img/default_user.png' %}"></i>
+        {% else %}
+          <img id="iamgeInicio" width="38px" height="38px" src="{{ image_profile.url }}"></i>
+        {% endif %}
+      </a>
+      <div class="dropdown-menu dropdown-menu-right">
+        <a class="dropdown-item closeSessionLink" data-toggle="modal" data-target="#closeSessionModal" role="button" href="#">Cerrar sesión</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="modal fade" id="closeSessionModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <p class="modal-title" id="exampleModalLongTitle">Cerrar sesión</p>
+      </div>
+      <div class="modal-body littleModalBody">
+    <div class="totalValueDiv">
+      <p class="modalText">¿Estás seguro de cerrar sesión?</p>
+    </div>
+      </div>
+      <div class="modal-footer">
+        <a href="/logout/" id="closeSessionButtonModal" class="btn btn-danger btn-lg col-12 col-sm-6 col-md-6">Cerrar sesión</a>
+        <button type="button" data-dismiss="modal" id="backButton" class="btn btn-secondary btn-lg col-12 col-sm-6 col-md-6">Volver</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="darkscreen">
+</div>

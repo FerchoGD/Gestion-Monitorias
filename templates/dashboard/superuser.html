@@ -1,0 +1,113 @@
+{% extends "dashboard/base.html" %}
+
+{% load staticfiles %}
+
+{% block link_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard/base.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+<style media="screen">
+  .table td {
+    text-align: center;
+  },
+  .table th {
+    text-align: center;
+  }
+  .table tr {
+    text-align: center;
+  }
+</style>
+{% endblock link_css %}
+
+{% block content %}
+{% include 'header.html' %}
+<div class="darkscreen">
+</div>
+<div class="container col-12" style="heigth: 100%;padding: 0 !important;">
+  <div class="row" style="height: 50px; width: 100%; background-color: blue;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellidos</th>
+          <th scope="col">Correo</th>
+          <th scope="col">Actualizar</th>
+          <th scope="col">Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for admin in admins %}
+        <tr>
+          <td>{{ admin.user.first_name }}</td>
+          <td>{{ admin.user.last_name }}</td>
+          <td>{{ admin.user.email }}</td>
+          <td>
+            <a class="btn" href="/dashboard/superuser/admin/edit/{{ admin.pk }}/">
+              <i class="fas fa-pencil-alt"></i>
+            </a>
+          </td>
+          <td>
+            <a class="btn" href="#" onclick="deleteAdminOpenModal({{ admin.pk }}, '{{ admin.user.first_name }} {{ admin.user.last_name }}')">
+              <i class="fas fa-trash"></i>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<button
+  style="position:absolute;bottom:15px;right:15px;border-radius:50%;"
+  class="btn pmd-btn-fab pmd-ripple-effect btn-primary pmd-btn-raised"
+  type="button">
+  <a href="admin/create/">
+    <i class="material-icons pmd-sm">add</i>
+  </a>
+</button>
+
+
+<form id="form-delete-admin" method="post" hidden>{% csrf_token %}
+  <input type="text" name="id_admin" hidden>
+  <input type="submit" name="delete-admin">
+</form>
+
+<div class="modal fade" id="deleteAdminModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <p class="modal-title" id="exampleModalLongTitle">Eliminar administrador</p>
+      </div>
+      <div class="modal-body littleModalBody">
+    <div class="totalValueDiv">
+      <p id="delete-name-admin" class="modalText">¿Estás seguro de eliminar al administrador ?</p>
+    </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#" id="deleteAdminSubmit" class="btn btn-danger btn-lg col-12 col-sm-6 col-md-6">Eliminar</a>
+        <button type="button" data-dismiss="modal" id="backButton" class="btn btn-secondary btn-lg col-12 col-sm-6 col-md-6">Volver</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+  function deleteAdminOpenModal(id_admin, name_admin) {
+    $("input[name=id_admin]").val(id_admin);
+    $("#delete-name-admin").html(`¿Estás seguro de eliminar al administrador ${name_admin}?`)
+    $("#deleteAdminModal").modal('show');
+  }
+
+  $(document).ready(() => {
+    $("#deleteAdminSubmit").click(() => {
+      $("input[name=delete-admin]").trigger('click');
+    })
+
+    {% if show_alert %}
+    bootbox.alert("{{ message }}");
+    {% endif %}
+  });
+</script>
+{% endblock %}

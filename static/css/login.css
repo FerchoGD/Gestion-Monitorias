@@ -1,0 +1,107 @@
+body, html {
+    height: 100%;
+    background-color: #1B5079;
+}
+
+.card-container.card {
+    /* max-width: 50%; */
+    background-color: #1B5079;
+}
+
+#profile-img {
+  width: 250px;
+  height: auto;
+}
+
+.btn {
+    font-weight: 700;
+    height: 36px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
+/*
+ * Card component
+ */
+.card {
+    padding: 20px 25px 30px;
+    margin: auto;
+    border: 0;
+}
+
+.profile-img-card {
+    width: 50%;
+    height: 50%;
+    margin: 0 auto 10px;
+    display: block;
+}
+
+/*
+ * Form styles
+ */
+.profile-name-card {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px 0 0;
+    min-height: 1em;
+}
+
+.form-signin #email,
+.form-signin #password,
+.form-signin #btnSubmit {
+    direction: ltr;
+    height: 60px;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.form-signin input[type=email],
+.form-signin input[type=password],
+.form-signin button {
+    width: 100%;
+    display: block;
+    margin-bottom: 10px;
+    z-index: 1;
+    position: relative;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 30px;
+}
+
+.custom_row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+main {
+  margin-left: 0 !important;
+}
+
+.form-signin button {
+  background-color: #03A9F4;
+  border-color: #03A9F4;
+  text-transform: uppercase;
+}
+
+.alert-dialog {
+  margin-left:20px;
+  margin-right:20px;
+}
+
+@media screen and (min-width: 300px) {
+  .profile-img-card {
+      width: 70%;
+  }
+  #lbl-menu {
+    display: none;
+  }
+}
+
+#profile-img {
+  max-width: 550px;
+  height: auto;
+}

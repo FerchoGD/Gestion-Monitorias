@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <title>MonitoriasUtp</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+  </head>
+  <body>
+
+    {% if showAlert %}
+    <div class="alert-bottom alert alert-danger alert-dialog">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <strong>Error.</strong> {{ message }}
+    </div>
+    {% endif %}
+    <div class="container custom_row h-100 w-100 justify-content-center align-items-center" sytle="margin-left:0 !important;">
+        <div class="card card-container">
+            <a href="/"><img id="profile-img" class="profile-img-card" src="{% static 'img/isc-logo.png' %}" /></a>
+            <p id="profile-name" class="profile-name-card"></p>
+            <form class="form-signin" method="post">{% csrf_token %}
+                <span id="reauth-email" class="reauth-email"></span>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value="{{ email }}"
+                  class="form-control"
+                  placeholder="Correo electrónico"
+                  required
+                  autofocus>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  class="form-control"
+                  placeholder="Contraseña"
+                  required>
+                <button
+                  type="submit"
+                  id="btnSubmit"
+                  name="btnSubmit"
+                  class="btn btn-lg btn-primary btn-block btn-signin">
+                  Iniciar sesión
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,193 @@
+{% extends "dashboard/base.html" %}
+
+{% load staticfiles %}
+
+{% block link_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard/base.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,700" rel="stylesheet">
+<style media="screen">
+  .table td {
+    text-align: center;
+  },
+  .table th {
+    text-align: center;
+  }
+  .table tr {
+    text-align: center;
+  }
+</style>
+{% endblock link_css %}
+
+{% block content %}
+{% include 'header.html' %}
+<div class="darkscreen">
+</div>
+<div class="container col-12" style="heigth: 100%;padding: 0 !important;">
+  <div class="row" style="height: 50px; width: 100%; background-color: blue;">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellidos</th>
+          <th scope="col">Correo</th>
+          <th scope="col">Actualizar</th>
+          <th scope="col">Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+        <tr>
+          <td>{{ student.user.first_name }}</td>
+          <td>{{ student.user.last_name }}</td>
+          <td>{{ student.user.email }}</td>
+          <td>
+            <a href="#" onclick="getInfoForm({{ student.pk }})">
+              <i class="fas fa-pencil-alt"></i>
+            </a>
+          </td>
+          <td>
+            <a href="#" onclick="deletestudentOpenModal({{ student.pk }}, '{{ student.user.first_name }} {{ student.user.last_name }}')">
+              <i class="fas fa-trash"></i>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<button
+  style="position:absolute;bottom:15px;right:15px;border-radius:50%;"
+  class="btn pmd-btn-fab pmd-ripple-effect btn-primary pmd-btn-raised"
+  type="button">
+  <a href="#" onclick="openModalCreatestudent()">
+    <i class="material-icons pmd-sm">add</i>
+  </a>
+</button>
+
+<form id="form-delete-student" method="post" hidden>{% csrf_token %}
+  <input type="text" name="id_student" hidden>
+  <input type="submit" name="delete-student">
+</form>
+
+<form id="get-info-student" method="post" hidden>{% csrf_token %}
+  <input type="text" name="id_student" hidden>
+  <input type="submit" name="get-info-student">
+</form>
+
+<div class="modal fade" id="deleteAdminModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <p class="modal-title" id="create-student-modalLongTitle">Eliminar estudiante</p>
+      </div>
+      <div class="modal-body littleModalBody">
+    <div class="totalValueDiv">
+      <p id="delete-name-student" class="modalText">¿Estás seguro de eliminar al estudiante ?</p>
+    </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#" id="deleteAdminSubmit" class="btn btn-danger btn-lg col-12 col-sm-6 col-md-6">Eliminar</a>
+        <button type="button" data-dismiss="modal" id="backButton" class="btn btn-secondary btn-lg col-12 col-sm-6 col-md-6">Volver</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="create-student-modal" tabindex="-1" role="dialog" aria-labelledby="create-student-modalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="create-student-modalLabel">{% if editting_student %}Editar{% else %}Crear{% endif %} estudiante</h5>
+      </div>
+      <div class="modal-body">
+        <form method="POST" id="form-create-student">{% csrf_token %}
+          {% if id_student_editting != 0 %}
+          <input type="number" name="id_student" value="{{ id_student_editting }}" hidden>
+          {% endif %}
+          <div class="form-group">
+            <label for="name-student">Nombres</label>
+            <input type="text" class="form-control" value="{{ name_student }}" name="name-student" aria-describedby="nameHelp" placeholder="Nombres del estudiante" required>
+            <small id="nameHelp" class="form-text text-muted">Nombres del estudiante</small>
+          </div>
+          <div class="form-group">
+            <label for="last-name-student">Apellidos</label>
+            <input type="text" class="form-control" value="{{ last_name_student }}" name="last-name-student" aria-describedby="lastNameHelp" placeholder="Apellidos del estudiante" required>
+            <small id="lastNameHelp" class="form-text text-muted">Apellidos del estudiante</small>
+          </div>
+          <div class="form-group">
+            <label for="dni-student">Documento</label>
+            <input type="number" min="0" class="form-control" value="{{ dni_student }}" name="dni-student" aria-describedby="dniHelp" placeholder="Documento del estudiante" required>
+            <small id="dniHelp" class="form-text text-muted">Documento del estudiante</small>
+          </div>
+          <div class="form-group">
+            <label for="email-student">Correo electrónico</label>
+            <input type="email" class="form-control" value="{{ email }}" name="email-student" aria-describedby="emailHelp" placeholder="Ingrese el correo electrónico @utp.edu.co del estudiante" required>
+            <small id="emailHelp" class="form-text text-muted">Correo electrónico del estudiante</small>
+          </div>
+          <div class="form-group">
+              <label for="fecha-nacimiento-student">Fecha de nacimiento</label>
+              <input type="date" class="form-control" value="{{ fecha_nacimiento_student|date:'Y-m-d' }}" name="fecha-nacimiento-student" aria-describedby="BirdDateHelp" placeholder="Ingrese la fecha de nacimiento del student" required>
+              <small id="BirdDateHelp" class="form-text text-muted"></small>
+            </div>
+          <div class="form-group">
+            <label for="genders">Genero</label>
+            <select class="form-control" value="{{ gender }}" id="genders" name="gender" required>
+              {% for gender in genders %}
+              <option value="{{ gender }}" {%if gender == genero %}selected{% endif%}>{{ gender }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          {% if not editting_student %}
+          <div class="form-group">
+            <label for="password-student">Contraseña</label>
+            <input type="password" class="form-control" value="{{ password }}" name="password-student" placeholder="Ingrese la contraseña" required>
+          </div>
+          {% endif %}
+          <button type="submit" name="{% if editting_student %}edit{% else %}create{% endif %}-student-submit" class="btn btn-primary col-12">{% if editting_student %}Editar{% else %}Crear{% endif %} estudiante</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script type="text/javascript">
+  function openModalCreatestudent() {
+    $("#form-create-student")[0].reset();
+    $("#create-student-modal").modal('show');
+  }
+
+  function deletestudentOpenModal(id_student, name_student) {
+    $("input[name=id_student]").val(id_student);
+    $("#delete-name-student").html(`¿Estás seguro de eliminar al estudiante ${name_student}?`)
+    $("#deleteAdminModal").modal('show');
+  }
+
+  function getInfoForm(id_student) {
+    $("#get-info-student input[name=id_student]").val(id_student);
+    $("input[name=get-info-student]").trigger('click');
+  }
+
+  $(document).ready(() => {
+    $("#deleteAdminSubmit").click(() => {
+      $("input[name=delete-student]").trigger('click');
+    })
+
+    {% if show_alert %}
+    bootbox.alert("{{ message }}", () => {
+      $("#create-student-modal").modal('show');
+    });
+    {% endif %}
+
+    {% if editting_student %}
+    $("#create-student-modal").modal('show');
+    $('#create-student-modal').on('hidden.bs.modal', function () {
+      window.location = '/dashboard/admin/students/';
+    })
+    {% endif %}
+  });
+</script>
+{% endblock %}
